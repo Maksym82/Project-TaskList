@@ -19,6 +19,10 @@ function App() {
     setTasks([...tasks, { ...task, completed: false, id: Date.now() }]);
   }
 
+  function deleteTask(id){
+    setTasks(tasks.filter(task => task.id !==id))
+  }
+
   console.log(tasks);
 
   const activeTasks = tasks.filter((task) => !task.completed);
@@ -49,7 +53,7 @@ function App() {
           <button className="sort-button">By Date</button>
           <button className="sort-button">By Priority</button>
         </div>
-        {openSection.tasks && <TaskList activeTasks={activeTasks} />}
+        {openSection.tasks && <TaskList deleteTask={deleteTask} activeTasks={activeTasks} />}
       </div>
 
       <div className="completed-task-container">
@@ -107,11 +111,11 @@ function TaskForm({ addTask }) {
   );
 }
 
-function TaskList({ activeTasks }) {
+function TaskList({ activeTasks, deleteTask }) {
   return (
     <ul className="task-list">
       {activeTasks.map((task) => (
-        <TaskItem task={task} key={task.id}/>
+        <TaskItem deleteTask={deleteTask} task={task} key={task.id}/>
       ))}
     </ul>
   );
@@ -125,7 +129,7 @@ function ComletedTaskList() {
   );
 }
 
-function TaskItem({ task }) {
+function TaskItem({ task, deleteTask }) {
 
   const {title, priority, deadline, id} = task
 
@@ -139,7 +143,7 @@ function TaskItem({ task }) {
       </div>
       <div className="task-buttons">
         <button className="complete-button">Complete</button>
-        <button className="delete-button">Delete</button>
+        <button className="delete-button" onClick={() => deleteTask(id)}>Delete</button>
       </div>
     </li>
   );
